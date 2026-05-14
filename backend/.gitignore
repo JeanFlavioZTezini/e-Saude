@@ -1,0 +1,16 @@
+node_modules/
+    .env
+    ```
+*   Assim que você salvar, a pasta `node_modules` do backend deve mudar de cor e ficar mais "apagada" no explorador de arquivos.
+
+### 3. Como verificar se as dependências foram instaladas
+Para ter certeza de que o comando listado no seu `comoFazer.txt` funcionou:
+*   Abra o arquivo `package.json` que está dentro da pasta **`backend`**.
+*   Procure por um bloco chamado `"dependencies"`.
+*   Se você encontrar `express`, `pg`, `cors` e `dotenv` listados ali (junto com os números das versões deles), significa que tudo foi instalado perfeitamente!
+
+### 4. Fazendo o Commit do jeito certo
+Depois de entrar na pasta correta (`cd e-Saude-front`), criar o `.gitignore` e conferir as dependências, você pode rodar os comandos no terminal em segurança:
+```bash
+git add .
+git commit -m "Estrutura inicial e dependencias"
