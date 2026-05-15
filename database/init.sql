@@ -1,32 +1,31 @@
--- Criação da tabela de Usuários (Funcionários do sistema)
-CREATE TABLE IF NOT EXISTS usuarios (
+-- 1. Criação da tabela de Unidades de Saúde
+CREATE TABLE IF NOT EXISTS unidades_de_saude (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    senha_hash VARCHAR(255) NOT NULL,
-    perfil VARCHAR(50) NOT NULL, -- Ex: 'ADMIN', 'MEDICO', 'RECEPCIONISTA'
-    ativo BOOLEAN DEFAULT TRUE,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Criação da tabela de Pacientes
-CREATE TABLE IF NOT EXISTS pacientes (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) UNIQUE NOT NULL,
-    data_nascimento DATE NOT NULL,
-    telefone VARCHAR(20),
+    nome VARCHAR(150) NOT NULL,
     endereco TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Criação da tabela de Prontuários/Atendimentos
-CREATE TABLE IF NOT EXISTS atendimentos (
+-- 2. Criação da tabela de Gestores
+-- A chave estrangeira (unidade_id) garante que cada gestor pertença a uma unidade
+CREATE TABLE IF NOT EXISTS gestores (
     id SERIAL PRIMARY KEY,
-    paciente_id INTEGER REFERENCES pacientes(id) ON DELETE CASCADE,
-    medico_id INTEGER REFERENCES usuarios(id),
-    data_atendimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    motivo TEXT NOT NULL,
-    observacoes TEXT,
-    status VARCHAR(50) DEFAULT 'AGUARDANDO' -- Ex: 'AGUARDANDO', 'EM_ATENDIMENTO', 'FINALIZADO'
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    unidade_id INTEGER NOT NULL REFERENCES unidades_de_saude(id) ON DELETE RESTRICT,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Criação da tabela de Funcionários
+-- A chave estrangeira (gestor_id) garante que cada funcionário responda a um gestor
+CREATE TABLE IF NOT EXISTS funcionarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    gestor_id INTEGER NOT NULL REFERENCES gestores(id) ON DELETE RESTRICT,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
