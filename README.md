@@ -11,8 +11,20 @@ O Sistema e-Saúde foi idealizado para atender às necessidades de Unidades Bás
 
 # Como contribuir com o projeto?
 
-- git pull
-- git checkout -b minha-feature
-- git add .
-- git commit -m "feat: minha alteração"
-- git push origin minha-feature
+# 1. Garante que você está na main atualizada
+git checkout main
+git pull origin main
+
+# 2. Cria sua branch a partir da main atualizada
+git checkout -b minha-feature
+
+# 3. Trabalha, commita...
+git add .
+git commit -m "feat: adiciona model de equipes"
+
+# 4. Antes de abrir o PR, puxa as atualizações mais recentes da main
+#    (seus amigos podem ter commitado enquanto você trabalhava)
+git pull origin main
+
+# 5. Sobe sua branch e abre o PR
+git push origin minha-feature

@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config(); // Puxa as variáveis do arquivo .env
 
-const app = express();
+const app = express(); //toda vez que quiser usar o express, basta usar a variável app
 
 // Middlewares básicos
 app.use(cors()); // Permite que o seu frontend React converse com este backend
