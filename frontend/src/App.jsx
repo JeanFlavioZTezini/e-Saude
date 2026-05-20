@@ -1,8 +1,11 @@
-import Home from './pages/public/Home' // Ele já encontra o index.jsx sozinho!
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/public/Home'
 
 function App() {
   return (
-    <Home />
+    <Routes>
+      <Route path="/" element={<Home />} />
+    </Routes>
   )
 }
 

@@ -15,7 +15,7 @@ export const styles = {
     margin: 0,
     fontFamily: 'Montserrat, sans-serif',
     fontSize: '1.5rem',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   btnAcesso: {
     backgroundColor: '#1a5f7a',
@@ -37,7 +37,7 @@ export const styles = {
     padding: '100px 5%', 
     textAlign: 'center', // Centraliza o texto do título e subtítulo
     width: '100%',
-    //height: '550px', // Altura fixa para o banner
+    //height: '600px', // Altura fixa para o banner
     position: 'relative' // Necessário caso queiramos posicionar algo absoluto aqui dentro
   },
   tituloBanner: {
@@ -136,25 +136,30 @@ export const styles = {
     padding: '20px 5% 60px 5%'
   },
   cardsWrapper: {
-    display: 'flex',
-    flexDirection: 'column', // Coloca um card em cima do outro
-    gap: '20px',
-    width: '100%'
+  display: 'flex',
+  flexDirection: 'row',  // lado a lado no PC
+  gap: '20px',
+  width: '100%',
+  flexWrap: 'wrap',      // empilha quando a tela for pequena
   },
   cardImc: {
-    border: '2px solid #2b8471', 
+    border: '2px solid #2b8471',
     borderRadius: '10px',
     padding: '30px',
-    backgroundColor: '#f0fbf7', 
-    display: 'flex', // Coloca o formulário e a tabela lado a lado
+    backgroundColor: '#f0fbf7',
+    display: 'flex',
     gap: '40px',
-    flexWrap: 'wrap' // Se a tela for pequena (celular), joga a tabela pra baixo do formulário
+    flexWrap: 'wrap',
+    flex: '1',             // os dois cards dividem o espaço igualmente
+    minWidth: '300px',     // empilha quando não couber lado a lado
   },
   cardHidratacao: {
-    border: '2px solid #1a5f7a', 
+    border: '2px solid #1a5f7a',
     borderRadius: '10px',
     padding: '30px',
-    backgroundColor: '#f0f7ff' 
+    backgroundColor: '#f0f7ff',
+    flex: '1',             // mesmo tamanho que o card do IMC
+    minWidth: '300px',     // empilha quando não couber lado a lado
   },
   tituloCard: {
     width: '100%', // Ocupa 100% da linha do flex, forçando os itens seguintes para a linha de baixo
@@ -257,7 +262,78 @@ export const styles = {
     textDecoration: 'none',
     fontSize: '0.9rem',
     cursor: 'pointer' // Mostra que é clicável
-  }
+  },
+  // --- BOTÕES DE REGIÃO NO BANNER ---
+  regioesNoBanner: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '40px',
+    flexWrap: 'wrap'
+  },
+  btnRegiao: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '16px 20px 12px',
+    borderRadius: '12px',
+    border: 'none',
+    cursor: 'pointer',
+    minWidth: '110px',
+    minHeight: '130px',
+    position: 'relative',
+    overflow: 'hidden',
+    transition: 'transform 0.2s',
+    color: 'white',
+  },
+  iconRegiao: {
+    position: 'absolute',
+    top: '8px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '80px',
+    height: '70px',
+    objectFit: 'contain',
+    opacity: 0.35,
+  },
+  nomeRegiao: {
+    fontWeight: '700',
+    fontSize: '1rem',
+    position: 'relative',
+    zIndex: 1,
+    color: 'white',
+    textShadow: '0 1px 3px rgba(0,0,0,0.4)'
+  },
 
+  // --- BALÃO DE ESTADOS ---
+  balaoEstados: {
+  margin: '20px 5% 10px',
+  padding: '30px',
+  borderRadius: '16px',
+  border: '1.5px solid',
+  backgroundColor: '#f9f9f9',
+  },
+  balaoTitulo: {
+    fontWeight: '600',
+    fontSize: '1rem',
+    marginBottom: '16px'
+  },
+  estadosGrid: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '12px'
+  },
+  btnEstado: {
+  backgroundColor: 'transparent',
+  border: 'none',
+  borderRadius: '20px',
+  padding: '8px 18px',
+  cursor: 'pointer',
+  fontWeight: '500',
+  fontSize: '0.9rem',
+  transition: 'background-color 0.2s ease',
+  },
 
+  
 };
