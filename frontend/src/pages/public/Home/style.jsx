@@ -11,8 +11,9 @@ export const styles = {
     borderBottom: '1px solid #eaeaea' // Linha sutil separando o cabeçalho do banner
   },
   logo: {
-    color: '#2b8471',
+    color: '#0F4C81',
     margin: 0,
+    fontFamily: 'Montserrat, sans-serif',
     fontSize: '1.5rem',
     fontWeight: '700'
   },
@@ -30,13 +31,13 @@ export const styles = {
   // --- ESTILOS DO BANNER PRINCIPAL ---
   banner: {
     backgroundColor: '#9ad0f5', // Cor de fundo azul clara
-    /* IMPORTANTE: Quando você exportar a imagem do Figma, remova os comentários abaixo */
-    // backgroundImage: 'url("/banner-bg.png")', 
-    // backgroundSize: 'cover', // Faz a imagem preencher todo o espaço
-    // backgroundPosition: 'center', // Centraliza a imagem de fundo
+    backgroundImage: 'url("")', // Imagem de fundo do banner
+    backgroundSize: 'cover', // Faz a imagem preencher todo o espaço
+    backgroundPosition: 'center', // Centraliza a imagem de fundo
     padding: '100px 5%', 
     textAlign: 'center', // Centraliza o texto do título e subtítulo
     width: '100%',
+    //height: '550px', // Altura fixa para o banner
     position: 'relative' // Necessário caso queiramos posicionar algo absoluto aqui dentro
   },
   tituloBanner: {
@@ -71,18 +72,18 @@ export const styles = {
     padding: '18px 50px 18px 25px', // O 50px na direita abre espaço para não digitar em cima da lupa
     borderRadius: '30px',
     border: 'none',
-    boxShadow: '0px 4px 15px rgba(0,0,0,0.05)', // Sombra suave
+    boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.27)', // Sombra suave
     outline: 'none', // Remove aquela borda preta feia ao clicar no input
     fontSize: '1rem'
   },
   iconeBusca: {
-    position: 'absolute', // Descola a lupa do fluxo normal
-    right: '20px', // Prende ela 20px longe da borda direita
+    position: 'absolute',
+    right: '20px',
     top: '50%',
-    transform: 'translateY(-50%)', // O top 50% + translateY(-50%) centraliza perfeitamente na vertical
+    transform: 'translateY(-50%)',
     fontSize: '1.2rem',
     color: '#003366',
-    pointerEvents: 'none' // Impede que a lupa bloqueie o clique no input embaixo dela
+    pointerEvents: 'none'
   },
   btnBuscar: {
     backgroundColor: '#1a5f7a',
@@ -93,7 +94,7 @@ export const styles = {
     cursor: 'pointer',
     fontSize: '1.1rem',
     fontWeight: '600',
-    boxShadow: '0px 4px 15px rgba(0,0,0,0.05)'
+    boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.27)'
   },
   
   // --- ESTILOS DA SEÇÃO DE REGIÕES ---
@@ -257,4 +258,6 @@ export const styles = {
     fontSize: '0.9rem',
     cursor: 'pointer' // Mostra que é clicável
   }
+
+
 };

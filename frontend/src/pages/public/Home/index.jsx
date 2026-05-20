@@ -1,4 +1,7 @@
 import React from 'react';
+import logoImg from '../../../assets/logo.png';
+import bannerBg from '../../../assets/banner-bg.jpg';
+import { Search, Droplets, Wrench, Info, Lock, Calculator} from 'lucide-react';
 // Importamos o objeto 'styles' do nosso arquivo style.jsx para aplicar o CSS inline
 import { styles } from './style';
 
@@ -12,20 +15,20 @@ export default function Home() {
           Contém a logo do projeto e o botão de login
           ========================================== */}
       <header style={styles.header}>
-        <div>
-          <h2 style={styles.logo}>🩺 e-Saúde</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src={logoImg} alt="Logo e-Saúde" style={{ height: '45px' }} />
+          <h2 style={styles.logo}>e-Saúde</h2>
         </div>
         <button style={styles.btnAcesso}>
+          <Lock size={16} style={{ marginRight: '8px' }} />
           Acesso restrito
         </button>
       </header>
 
       {/* ==========================================
-          BANNER PRINCIPAL (HERO SECTION)
-          A primeira coisa que o usuário vê. Contém 
-          o título principal e o campo de busca.
+          BANNER PRINCIPAL
           ========================================== */}
-      <section style={styles.banner}>
+      <section style={{...styles.banner, backgroundImage: `url(${bannerBg})`}}>
         <h1 style={styles.tituloBanner}>
           Saúde pública mais próxima<br/>de você. {/* A tag <br/> quebra a linha do texto */}
         </h1>
@@ -43,13 +46,14 @@ export default function Home() {
               style={styles.inputBusca}
             />
             {/* Ícone de lupa posicionado de forma absoluta dentro do input */}
-            <span style={styles.iconeBusca}>🔍</span>
+            <span style={styles.iconeBusca}><Search size= {20} /></span>
           </div>
           {/* Botão para disparar a pesquisa */}
           <button style={styles.btnBuscar}>
             Buscar
           </button>
         </div>
+        
       </section>
 
       {/* ==========================================
@@ -59,7 +63,7 @@ export default function Home() {
           ========================================== */}
       <section style={styles.regioesContainer}>
         <h3 style={styles.regioesTitulo}>
-          🔎 Encontre Qualquer Posto de Saúde do Brasil
+          <Search size= {20} /> Encontre Qualquer Posto de Saúde do Brasil
         </h3>
         <div style={styles.botoesWrapper}>
           <button style={styles.btnRegiao}>Norte</button>
@@ -76,15 +80,15 @@ export default function Home() {
           calculadoras de IMC e Hidratação.
           ========================================== */}
       <section style={styles.ferramentasContainer}>
-        <h3 style={{ color: '#1a5f7a', marginBottom: '20px', width: '100%', fontSize: '1.2rem', fontWeight: '600', textAlign: 'left' }}>
-          🔗 Ferramentas de saúde
+        <h3 style={{ color: '#1a5f7a', marginBottom: '20px', width: '100%', fontSize: '1.2rem', fontWeight: '600', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Wrench size={20} /> Ferramentas de saúde
         </h3>
 
         <div style={styles.cardsWrapper}>
           
           {/* CALCULADORA DE IMC (Com Formulário e Tabela Visual) */}
           <div style={styles.cardImc}>
-            <h4 style={{...styles.tituloCard, color: '#2b8471'}}>📊 Calculadora de IMC</h4>
+            <h4 style={{...styles.tituloCard, color: '#2b8471', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}><Calculator size={20} /> Calculadora de IMC</h4>
             
             {/* Formulário de entrada de dados do IMC */}
             <div style={{ flex: '1', minWidth: '250px' }}>
@@ -118,9 +122,9 @@ export default function Home() {
             </table>
           </div>
 
-          {/* CALCULADORA DE HIDRATAÇÃO (Apenas Formulário) */}
+          {/* CALCULADORA DE HIDRATAÇÃO*/}
           <div style={styles.cardHidratacao}>
-            <h4 style={{...styles.tituloCard, color: '#1a5f7a'}}>💧 Calculadora de hidratação</h4>
+            <h4 style={{...styles.tituloCard, color: '#1a5f7a', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}><Droplets size={20} /> Calculadora de hidratação</h4>
             <div style={{ maxWidth: '300px' }}>
               <div style={styles.formGroup}>
                 <label style={{fontSize: '1rem', fontWeight: '600'}}>Idade:</label>
@@ -143,8 +147,8 @@ export default function Home() {
           do sistema e-Saúde.
           ========================================== */}
       <section style={styles.sobreContainer}>
-        <h3 style={{ color: '#1a5f7a', marginBottom: '20px', width: '100%', fontSize: '1.2rem', fontWeight: '600', textAlign: 'left' }}>
-          ℹ️ Sobre o projeto
+        <h3 style={{ color: '#1a5f7a', marginBottom: '20px', width: '100%', fontSize: '1.2rem', fontWeight: '600', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Info size={20} /> Sobre o projeto
         </h3>
 
         <div style={styles.sobreCard}>
@@ -182,7 +186,7 @@ export default function Home() {
       <footer style={styles.footerContainer}>
         {/* Lado esquerdo do rodapé (Logo e texto) */}
         <div style={styles.footerInfo}>
-          <h2 style={{...styles.logo, color: '#4ade80'}}>🩺 e-Saúde</h2>
+          <h2 style={{...styles.logo, color: '#4ade80'}}><img src={logoImg} alt="Logo e-Saúde" style={{ height: '45px' }} /> e-Saúde</h2>
           <p style={styles.footerDescricao}>
             Portal público de informações das Unidades Básicas de Saúde do Brasil.<br/>
             Dados atualizados mensalmente com base no CNES.
