@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { MapPin, Phone, Clock, ArrowRight, Lock, Map, Loader2 } from 'lucide-react';
+import { MapPin, Phone, Clock, ArrowRight, Lock, Map, Loader2, Navigation } from 'lucide-react';
 import { styles } from './style';
 
 export default function Busca() {
   const [searchParams] = useSearchParams();
   const termoDigitado = searchParams.get('q') || '';
+  
+  // 1. Agora o React pega as coordenadas que vieram da Home
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
+  
   const navigate = useNavigate();
 
-  // --- NOVOS ESTADOS PARA A INTEGRAÇÃO COM A API ---
   const [resultados, setResultados] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
-  // O useEffect faz a requisição para o nosso Backend assim que a página carrega
   useEffect(() => {
     const buscarUnidades = async () => {
       setCarregando(true);
       setErro(null);
 
       try {
-        // O React bate na porta do nosso servidor Node.js!
-        const resposta = await fetch(`http://localhost:3000/api/ubs/busca?q=${encodeURIComponent(termoDigitado)}`);
+        // 2. Montamos a URL garantindo que o GPS seja enviado para o Backend (se existir)
+        let urlDaApi = `http://localhost:3000/api/ubs/busca?q=${encodeURIComponent(termoDigitado)}`;
+        if (lat && lng) {
+          urlDaApi += `&lat=${lat}&lng=${lng}`;
+        }
+
+        const resposta = await fetch(urlDaApi);
         
         if (!resposta.ok) {
           throw new Error('Falha na resposta do servidor');
         }
 
         const dados = await resposta.json();
-        setResultados(dados); // Guarda os dados que vieram do Node
+        setResultados(dados); 
         
       } catch (err) {
         console.error("Erro na integração:", err);
@@ -39,7 +47,7 @@ export default function Busca() {
     };
 
     buscarUnidades();
-  }, [termoDigitado]); // Se o termo de busca mudar na URL, ele roda a busca de novo
+  }, [termoDigitado, lat, lng]); 
 
   return (
     <div>
@@ -59,11 +67,10 @@ export default function Busca() {
           {termoDigitado ? `Resultados para: "${termoDigitado}"` : "Busca de Unidades"}
         </h1>
 
-        {/* CONTROLE DE EXIBIÇÃO: CARREGANDO, ERRO OU RESULTADOS */}
         {carregando ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#1a5f7a', marginTop: '20px' }}>
             <Loader2 className="animate-spin" size={24} />
-            <span style={{ fontSize: '1.1rem' }}>Buscando informações na base de dados...</span>
+            <span style={{ fontSize: '1.1rem' }}>Calculando unidades mais próximas...</span>
           </div>
         ) : erro ? (
           <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '15px', borderRadius: '8px', marginTop: '20px' }}>
@@ -77,7 +84,7 @@ export default function Busca() {
 
             {resultados.length === 0 ? (
               <div style={{ backgroundColor: '#f3f4f6', padding: '30px', textAlign: 'center', borderRadius: '10px', marginTop: '20px' }}>
-                <p style={{ color: '#555', fontSize: '1.1rem' }}>Nenhuma unidade de saúde encontrada com esse nome.</p>
+                <p style={{ color: '#555', fontSize: '1.1rem' }}>Nenhuma unidade de saúde encontrada na sua região.</p>
               </div>
             ) : (
               <div style={styles.gridResultados}>
@@ -88,6 +95,14 @@ export default function Busca() {
                   return (
                     <div key={ubs.id} style={styles.cardUbs}>
                       <h3 style={styles.nomeUbs}>{ubs.nome}</h3>
+                      
+                      {/* 3. EXIBIÇÃO DA DISTÂNCIA (Só aparece se o Backend enviou o cálculo) */}
+                      {ubs.distancia && (
+                        <div style={{ ...styles.infoLinha, color: '#059669', fontWeight: '700', backgroundColor: '#d1fae5', padding: '6px 10px', borderRadius: '6px', display: 'inline-flex', width: 'fit-content' }}>
+                          <Navigation size={16} color="#059669" style={{ flexShrink: 0 }} />
+                          <span>A {ubs.distancia.toFixed(1)} km de você</span>
+                        </div>
+                      )}
                       
                       <div style={styles.infoLinha}>
                         <MapPin size={18} color="#2b8471" style={{ flexShrink: 0 }} />

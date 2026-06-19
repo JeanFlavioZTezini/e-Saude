@@ -1,50 +1,48 @@
-// Exportamos a constante styles para ser usada como objeto CSS no index.jsx
 export const styles = {
-  
-  // --- ESTILOS DO CABEÇALHO ---
+  // ── CABEÇALHO ──
   header: {
-    display: 'flex', // Coloca os itens lado a lado
-    justifyContent: 'space-between', // Joga a logo pra esquerda e o botão pra direita
-    padding: '20px 5%', // 20px em cima/baixo e 5% nas laterais para alinhar com a tela
-    alignItems: 'center', // Centraliza verticalmente
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '20px 5%',
+    alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderBottom: '1px solid #eaeaea' // Linha sutil separando o cabeçalho do banner
+    borderBottom: '1px solid #eaeaea'
   },
   logo: {
-    color: '#0F4C81',
+    color: '#2b8471',
     margin: 0,
-    fontFamily: 'Montserrat, sans-serif',
     fontSize: '1.5rem',
-    fontWeight: '700',
+    fontWeight: '700'
   },
   btnAcesso: {
     backgroundColor: '#1a5f7a',
     color: 'white',
     padding: '12px 24px',
     border: 'none',
-    borderRadius: '25px', // Borda arredondada (formato de pílula)
-    cursor: 'pointer', // Muda a setinha do mouse para a mãozinha
+    borderRadius: '25px',
+    cursor: 'pointer',
     fontWeight: '600',
-    fontSize: '0.9rem'
+    fontSize: '0.9rem',
+    display: 'flex',
+    alignItems: 'center'
   },
 
-  // --- ESTILOS DO BANNER PRINCIPAL ---
+  // ── BANNER PRINCIPAL ──
   banner: {
-    backgroundColor: '#9ad0f5', // Cor de fundo azul clara
-    backgroundImage: 'url("")', // Imagem de fundo do banner
-    backgroundSize: 'cover', // Faz a imagem preencher todo o espaço
-    backgroundPosition: 'center', // Centraliza a imagem de fundo
-    padding: '100px 5%', 
-    textAlign: 'center', // Centraliza o texto do título e subtítulo
+    backgroundColor: '#9ad0f5',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    padding: '100px 5% 120px 5%', 
+    textAlign: 'center',
     width: '100%',
-    //height: '600px', // Altura fixa para o banner
-    position: 'relative' // Necessário caso queiramos posicionar algo absoluto aqui dentro
+    position: 'relative'
   },
   tituloBanner: {
     color: '#003366',
     fontSize: '3.5rem', 
     marginBottom: '15px',
-    fontWeight: '700'
+    fontWeight: '700',
+    lineHeight: '1.2'
   },
   subtituloBanner: {
     color: '#00509e',
@@ -53,27 +51,28 @@ export const styles = {
     fontWeight: '400'
   },
 
-  // --- ESTILOS DA BARRA DE BUSCA ---
+  // ── BARRA DE BUSCA ──
   buscaContainer: {
     display: 'flex',
     justifyContent: 'center',
-    gap: '15px', // Espaço entre o input de texto e o botão buscar
-    maxWidth: '900px', // Limita a largura para não ficar gigante em monitores ultrawide
-    margin: '0 auto', // Centraliza o container na tela
-    width: '100%'
+    gap: '15px',
+    maxWidth: '900px', 
+    margin: '0 auto 50px auto',
+    width: '100%',
+    position: 'relative'
   },
   inputWrapper: {
-    position: 'relative', // Permite colocar a lupa flutuando aqui dentro
-    flex: '1', // Faz o input crescer para ocupar o espaço disponível
+    position: 'relative',
+    flex: '1',
     maxWidth: '650px'
   },
   inputBusca: {
     width: '100%',
-    padding: '18px 50px 18px 25px', // O 50px na direita abre espaço para não digitar em cima da lupa
+    padding: '18px 50px 18px 25px',
     borderRadius: '30px',
     border: 'none',
-    boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.27)', // Sombra suave
-    outline: 'none', // Remove aquela borda preta feia ao clicar no input
+    boxShadow: '0px 4px 15px rgba(0,0,0,0.05)',
+    outline: 'none',
     fontSize: '1rem'
   },
   iconeBusca: {
@@ -83,7 +82,9 @@ export const styles = {
     transform: 'translateY(-50%)',
     fontSize: '1.2rem',
     color: '#003366',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center'
   },
   btnBuscar: {
     backgroundColor: '#1a5f7a',
@@ -94,83 +95,159 @@ export const styles = {
     cursor: 'pointer',
     fontSize: '1.1rem',
     fontWeight: '600',
-    boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.27)'
+    boxShadow: '0px 4px 15px rgba(0,0,0,0.05)'
   },
-  
-  // --- ESTILOS DA SEÇÃO DE REGIÕES ---
-  regioesContainer: {
-    padding: '60px 5%',
-    textAlign: 'center'
+
+  // ── DROPDOWN DE SUGESTÕES DA BUSCA ──
+  dropdownSugestoes: {
+    position: 'absolute',
+    top: 'calc(100% + 10px)',
+    left: '0',
+    right: '0',
+    backgroundColor: '#ffffff',
+    borderRadius: '15px',
+    boxShadow: '0px 10px 30px rgba(0,0,0,0.1)',
+    zIndex: 100,
+    overflow: 'hidden',
+    textAlign: 'left',
+    border: '1px solid #eaeaea'
   },
-  regioesTitulo: {
-    color: '#1a5f7a',
-    fontSize: '1.2rem',
-    marginBottom: '30px',
+  itemSugestao: {
+    padding: '15px 25px',
+    borderBottom: '1px solid #f5f5f5',
+    cursor: 'pointer',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    fontWeight: '600'
-  },
-  botoesWrapper: {
-    display: 'flex', // Botões lado a lado
     justifyContent: 'space-between',
-    gap: '20px', // Espaço entre os botões
-    width: '100%' // Ocupa a largura toda disponível
+    alignItems: 'center',
+    transition: 'background-color 0.2s'
+  },
+  nomeSugestao: {
+    color: '#1a5f7a',
+    fontWeight: '700',
+    fontSize: '1rem',
+    margin: '0 0 4px 0'
+  },
+  infoSugestao: {
+    color: '#777',
+    fontSize: '0.85rem',
+    margin: 0
+  },
+  distanciaSugestao: {
+    backgroundColor: '#d1fae5',
+    color: '#059669',
+    padding: '4px 12px',
+    borderRadius: '12px',
+    fontSize: '0.8rem',
+    fontWeight: '700',
+    whiteSpace: 'nowrap'
+  },
+
+  // ── BOTÕES DE REGIÕES NO BANNER ──
+  regioesNoBanner: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '15px',
+    flexWrap: 'wrap',
+    maxWidth: '900px',
+    margin: '0 auto'
   },
   btnRegiao: {
-    backgroundColor: '#f0f7ff',
-    color: '#003366',
-    border: '1.5px solid #003366',
-    padding: '18px 10px',
+    color: 'white',
+    border: 'none',
+    padding: '14px 20px',
+    borderRadius: '12px',
+    cursor: 'pointer',
+    fontWeight: '600',
+    fontSize: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '6px',
+    minWidth: '110px',
+    flex: '1',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+  },
+  iconRegiao: {
+    height: '32px',
+    width: 'auto',
+    objectFit: 'contain'
+  },
+  nomeRegiao: {
+    fontSize: '0.95rem',
+    fontWeight: '700'
+  },
+
+  // ── BALÃO DE ESTADOS ──
+  balaoEstados: {
+    margin: '-40px 5% 40px 5%',
+    padding: '30px',
+    borderRadius: '15px',
+    border: '2px solid',
+    position: 'relative',
+    zIndex: 10,
+    boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
+    animation: 'fadeIn 0.3s ease'
+  },
+  balaoTitulo: {
+    fontSize: '1.1rem',
+    fontWeight: '700',
+    margin: '0 0 20px 0'
+  },
+  estadosGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+    gap: '12px'
+  },
+  btnEstado: {
+    border: 'none',
+    padding: '12px',
     borderRadius: '8px',
     cursor: 'pointer',
     fontWeight: '600',
-    fontSize: '1.1rem',
-    flex: '1', // A MÁGICA: Faz com que todos os botões se estiquem igualmente para preencher a tela
-    minWidth: '150px' // Impede que eles fiquem espremidos no celular
+    fontSize: '0.95rem',
+    transition: 'all 0.2s ease',
+    textAlign: 'center'
   },
 
-  // --- ESTILOS DAS FERRAMENTAS DE SAÚDE ---
+  // ── SEÇÃO DE FERRAMENTAS ──
   ferramentasContainer: {
-    padding: '20px 5% 60px 5%'
+    padding: '40px 5% 60px 5%'
   },
   cardsWrapper: {
-  display: 'flex',
-  flexDirection: 'row',  // lado a lado no PC
-  gap: '20px',
-  width: '100%',
-  flexWrap: 'wrap',      // empilha quando a tela for pequena
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    width: '100%'
   },
   cardImc: {
-    border: '2px solid #2b8471',
+    border: '2px solid #2b8471', 
     borderRadius: '10px',
     padding: '30px',
     backgroundColor: '#f0fbf7',
     display: 'flex',
     gap: '40px',
-    flexWrap: 'wrap',
-    flex: '1',             // os dois cards dividem o espaço igualmente
-    minWidth: '300px',     // empilha quando não couber lado a lado
+    flexWrap: 'wrap' 
   },
   cardHidratacao: {
-    border: '2px solid #1a5f7a',
+    border: '2px solid #1a5f7a', 
     borderRadius: '10px',
     padding: '30px',
-    backgroundColor: '#f0f7ff',
-    flex: '1',             // mesmo tamanho que o card do IMC
-    minWidth: '300px',     // empilha quando não couber lado a lado
+    backgroundColor: '#f0f7ff'
   },
   tituloCard: {
-    width: '100%', // Ocupa 100% da linha do flex, forçando os itens seguintes para a linha de baixo
-    textAlign: 'center',
+    width: '100%',
+    textAlign: 'left',
     margin: '0 0 20px 0',
     fontSize: '1.2rem',
-    fontWeight: '600'
+    fontWeight: '600',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
   },
   formGroup: {
     display: 'flex',
-    flexDirection: 'column', // Coloca a Label em cima do Input
+    flexDirection: 'column',
     gap: '8px',
     marginBottom: '15px'
   },
@@ -179,29 +256,30 @@ export const styles = {
     borderRadius: '8px',
     border: '1px solid #ccc',
     fontSize: '1rem',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    outline: 'none'
   },
   tabelaImc: {
-    borderCollapse: 'collapse', // Tira o espaçamento duplo padrão das bordas das tabelas HTML
+    borderCollapse: 'collapse',
     width: '100%',
-    minWidth: '400px', 
-    fontSize: '1rem',
-    flex: '1', // Faz a tabela crescer e preencher o espaço lateral vazio do card
-    border: '2px solid #000' 
+    minWidth: '320px', 
+    fontSize: '0.95rem',
+    flex: '1.2',
+    border: '2px solid #000'
   },
   celulaTabela: {
     border: '1px solid #000',
-    padding: '8px'
+    padding: '10px'
   },
 
-  // --- ESTILOS DA SEÇÃO SOBRE O PROJETO ---
+  // ── SEÇÃO SOBRE O PROJETO ──
   sobreContainer: {
     padding: '40px 5%',
     backgroundColor: '#ffffff'
   },
   sobreCard: {
-    backgroundColor: '#f0f7ff', 
-    border: '1px solid #1a5f7a',
+    backgroundColor: '#fbfdfd',
+    border: '1px solid #2b8471',
     borderRadius: '15px',
     padding: '40px',
     width: '100%'
@@ -214,126 +292,56 @@ export const styles = {
     fontSize: '1.2rem',
     fontWeight: '700',
     marginBottom: '10px',
-    display: 'block' // Força o span (que é inline por padrão) a se comportar como bloco
+    display: 'block'
   },
   sobreTexto: {
     color: '#444',
     fontSize: '1rem',
-    lineHeight: '1.6', // Aumenta o espaço entre as linhas para melhor leitura
-    textAlign: 'justify' // Texto alinhado como em jornal/documento oficial
+    lineHeight: '1.6',
+    textAlign: 'justify'
   },
 
-  // --- ESTILOS DO RODAPÉ (FOOTER) ---
+  // ── RODAPÉ ──
   footerContainer: {
-    backgroundColor: '#001a2c', 
+    backgroundColor: '#f8fafc',
+    borderTop: '1px solid #e2e8f0',
     padding: '60px 5%',
-    color: 'white',
-    display: 'flex', // Coloca as info da logo e as colunas de links lado a lado
+    color: '#334155',
+    display: 'flex',
     justifyContent: 'space-between',
-    flexWrap: 'wrap', // Permite quebrar linha em telas pequenas
+    flexWrap: 'wrap',
     gap: '40px'
   },
   footerInfo: {
-    maxWidth: '400px' // Limita o tamanho do texto explicativo da esquerda
+    maxWidth: '400px'
   },
   footerDescricao: {
     fontSize: '0.9rem',
-    color: '#ccc', // Cinza claro para contrastar com o fundo escuro
+    color: '#64748b',
     marginTop: '15px',
     lineHeight: '1.5'
   },
   footerColunasWrapper: {
     display: 'flex',
-    gap: '80px', // Grande espaço entre cada coluna de links
+    gap: '80px',
     flexWrap: 'wrap'
   },
   footerColuna: {
     display: 'flex',
-    flexDirection: 'column', // Links um embaixo do outro
+    flexDirection: 'column',
     gap: '12px'
   },
   footerColunaTitulo: {
     fontWeight: 'bold',
     fontSize: '1rem',
+    color: '#0f172a',
     marginBottom: '8px'
   },
   footerLink: {
-    color: '#ccc',
+    color: '#64748b',
     textDecoration: 'none',
     fontSize: '0.9rem',
-    cursor: 'pointer' // Mostra que é clicável
-  },
-  // --- BOTÕES DE REGIÃO NO BANNER ---
-  regioesNoBanner: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '16px',
-    marginTop: '40px',
-    flexWrap: 'wrap'
-  },
-  btnRegiao: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '16px 20px 12px',
-    borderRadius: '12px',
-    border: 'none',
     cursor: 'pointer',
-    minWidth: '110px',
-    minHeight: '130px',
-    position: 'relative',
-    overflow: 'hidden',
-    transition: 'transform 0.2s',
-    color: 'white',
-  },
-  iconRegiao: {
-    position: 'absolute',
-    top: '8px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '80px',
-    height: '70px',
-    objectFit: 'contain',
-    opacity: 0.35,
-  },
-  nomeRegiao: {
-    fontWeight: '700',
-    fontSize: '1rem',
-    position: 'relative',
-    zIndex: 1,
-    color: 'white',
-    textShadow: '0 1px 3px rgba(0,0,0,0.4)'
-  },
-
-  // --- BALÃO DE ESTADOS ---
-  balaoEstados: {
-  margin: '20px 5% 10px',
-  padding: '30px',
-  borderRadius: '16px',
-  border: '1.5px solid',
-  backgroundColor: '#f9f9f9',
-  },
-  balaoTitulo: {
-    fontWeight: '600',
-    fontSize: '1rem',
-    marginBottom: '16px'
-  },
-  estadosGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '12px'
-  },
-  btnEstado: {
-  backgroundColor: 'transparent',
-  border: 'none',
-  borderRadius: '20px',
-  padding: '8px 18px',
-  cursor: 'pointer',
-  fontWeight: '500',
-  fontSize: '0.9rem',
-  transition: 'background-color 0.2s ease',
-  },
-
-  
+    transition: 'color 0.2s'
+  }
 };
