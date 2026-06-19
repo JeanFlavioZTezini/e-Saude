@@ -68,3 +68,13 @@ body {
     flex-direction: column !important;
   }
 }
+
+/* Login responsivo */
+@media (max-width: 768px) {
+  .lado-visual-login {
+    display: none !important;
+  }
+  .lado-form-login {
+    flex: 1 1 100% !important;
+  }
+}

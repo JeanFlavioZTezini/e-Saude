@@ -203,7 +203,7 @@ export default function Home() {
           <img src={logoImg} alt="Logo e-Saúde" style={{ height: '45px' }} />
           <h2 style={styles.logo}>e-Saúde</h2>
         </div>
-        <button style={styles.btnAcesso}>
+        <button style={styles.btnAcesso} onClick={() => navigate('/login')}>
           <Lock size={16} style={{ marginRight: '8px' }} />
           Acesso restrito
         </button>
@@ -283,7 +283,7 @@ export default function Home() {
               onClick={() => handleRegiaoClick(regiao)}
               style={{
                 ...styles.btnRegiao,
-                backgroundColor: regiao.cor + '99',
+                backgroundColor: regiao.cor,
                 outline: regiaoSelecionada?.id === regiao.id ? `3px solid ${regiao.cor}` : 'none',
                 outlineOffset: '2px',
               }}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { MapPin, Phone, Clock, ArrowRight, Lock, Map, Loader2, Navigation } from 'lucide-react';
 import { styles } from './style';
+import logoImg from '../../../assets/logo.png';
 
 export default function Busca() {
   const [searchParams] = useSearchParams();
@@ -54,7 +55,8 @@ export default function Busca() {
       {/* CABEÇALHO */}
       <header style={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-          <h2 style={styles.logo}>🩺 e-Saúde</h2>
+        <img src={logoImg} alt="Logo e-Saúde" style={{ height: '40px' }} />
+        <h2 style={styles.logo}>e-Saúde</h2>
         </div>
         <button style={styles.btnAcesso}>
           <Lock size={16} style={{ marginRight: '8px' }} /> Acesso restrito
