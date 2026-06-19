@@ -21,6 +21,11 @@ const imagensRegioes = {
 };
 
 export default function Home() {
+  // --- ESTADOS DA BUSCA E NAVEGAÇÃO ---
+  const [termoBusca, setTermoBusca] = useState('');
+  const navigate = useNavigate();
+
+  // --- ESTADOS DAS REGIÕES E CALCULADORAS ---
   const [regiaoSelecionada, setRegiaoSelecionada] = useState(null);
   const [resultadoImc, setResultadoImc] = useState(null);
   const [alturaImc, setAlturaImc] = useState('');
@@ -28,11 +33,13 @@ export default function Home() {
   const [resultadoHidratacao, setResultadoHidratacao] = useState(null);
   const [idadeHidratacao, setIdadeHidratacao] = useState('');
   const [pesoHidratacao, setPesoHidratacao] = useState('');
-  const navigate = useNavigate();
+  
+  // --- REFERÊNCIAS PARA SCROLL SUAVE ---
   const balaoRef = useRef(null);
   const resultadoImcRef = useRef(null);
   const resultadoHidratacaoRef = useRef(null);
 
+  // --- FUNÇÕES ---
   function scrollSuave(ref, offset = 120) {
     setTimeout(() => {
       const posicao = ref.current?.getBoundingClientRect().top + window.scrollY - offset;
@@ -53,6 +60,14 @@ export default function Home() {
 
       requestAnimationFrame(animacao);
     }, 150);
+  }
+
+  // Função que dispara ao submeter o formulário de busca
+  function handleBuscar(e) {
+    e.preventDefault(); // Evita recarregar a página
+    if (termoBusca.trim() !== '') {
+      navigate(`/busca?q=${encodeURIComponent(termoBusca)}`);
+    }
   }
 
   function handleRegiaoClick(regiao) {
@@ -134,17 +149,20 @@ export default function Home() {
           Acesse os serviços de saúde do seu município e encontre a UBS mais próxima.
         </p>
 
-        <div style={styles.buscaContainer} className="busca-container">
+        {/* BARRA DE BUSCA TRANSFORMADA EM FORMULÁRIO */}
+        <form style={styles.buscaContainer} className="busca-container" onSubmit={handleBuscar}>
           <div style={styles.inputWrapper}>
             <input
               type="text"
               placeholder="Ex: cidade, estado, nome da unidade de saúde ou tipo de unidade"
               style={styles.inputBusca}
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
             />
             <span style={styles.iconeBusca}><Search size={18} /></span>
           </div>
-          <button style={styles.btnBuscar}>Buscar</button>
-        </div>
+          <button type="submit" style={styles.btnBuscar}>Buscar</button>
+        </form>
 
         <div style={styles.regioesNoBanner}>
           {regioes.map((regiao) => (
