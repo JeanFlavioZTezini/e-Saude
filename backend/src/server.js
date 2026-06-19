@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
@@ -66,6 +67,45 @@ app.get('/api/ubs/busca', (req, res) => {
     } catch (erro) {
         console.error("Erro no servidor:", erro.message);
         res.status(500).json({ erro: 'Falha ao buscar dados.' });
+    }
+});
+
+const siglasPorEstado = {
+    'acre': 'AC', 'alagoas': 'AL', 'amapa': 'AP', 'amazonas': 'AM',
+    'bahia': 'BA', 'ceara': 'CE', 'distrito-federal': 'DF', 'espirito-santo': 'ES',
+    'goias': 'GO', 'maranhao': 'MA', 'mato-grosso': 'MT', 'mato-grosso-do-sul': 'MS',
+    'minas-gerais': 'MG', 'para': 'PA', 'paraiba': 'PB', 'parana': 'PR',
+    'pernambuco': 'PE', 'piaui': 'PI', 'rio-de-janeiro': 'RJ', 'rio-grande-do-norte': 'RN',
+    'rio-grande-do-sul': 'RS', 'rondonia': 'RO', 'roraima': 'RR', 'santa-catarina': 'SC',
+    'sao-paulo': 'SP', 'sergipe': 'SE', 'tocantins': 'TO'
+};
+
+app.get('/api/estados/:slug/cidades', async (req, res) => {
+    try {
+        const slug = req.params.slug.toLowerCase();
+        const sigla = siglasPorEstado[slug];
+
+        if (!sigla) {
+            return res.status(404).json({ erro: 'Estado não encontrado.' });
+        }
+
+        console.log(`🏙️ Buscando cidades do estado: ${sigla}`);
+
+        const resposta = await axios.get(
+            `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${sigla}/municipios`
+        );
+
+        // Simplifica os dados, devolvendo só o que o frontend precisa
+        const cidades = resposta.data.map(municipio => ({
+            id: municipio.id,
+            nome: municipio.nome
+        })).sort((a, b) => a.nome.localeCompare(b.nome));
+
+        res.json(cidades);
+
+    } catch (erro) {
+        console.error("Erro ao buscar cidades do IBGE:", erro.message);
+        res.status(500).json({ erro: 'Falha ao buscar cidades.' });
     }
 });
 

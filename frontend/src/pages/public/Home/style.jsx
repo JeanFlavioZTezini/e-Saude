@@ -180,7 +180,7 @@ export const styles = {
 
   // ── BALÃO DE ESTADOS ──
   balaoEstados: {
-    margin: '-40px 5% 40px 5%',
+    margin: '20px 5% 40px 5%',
     padding: '30px',
     borderRadius: '15px',
     border: '2px solid',
