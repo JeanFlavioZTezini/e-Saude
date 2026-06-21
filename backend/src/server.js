@@ -1,10 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const intercorrenciaRoutes = require('./routes/intercorrenciaRoutes');
 require('dotenv').config();
 
 const app = express();
 app.use(cors()); 
-app.use(express.json()); 
+app.use(express.json());
+
+// 👇 ESTA É A LINHA QUE FALTAVA PARA CONECTAR O FRONTEND AO BANCO 👇
+app.use('/api/intercorrencias', intercorrenciaRoutes);
 
 // Função matemática para calcular distância entre duas coordenadas (Fórmula de Haversine)
 function calcularDistancia(lat1, lon1, lat2, lon2) {

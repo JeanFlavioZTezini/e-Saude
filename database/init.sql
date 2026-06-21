@@ -29,3 +29,16 @@ CREATE TABLE IF NOT EXISTS funcionarios (
     ativo BOOLEAN DEFAULT TRUE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 4. Criação da tabela de Intercorrências
+-- Armazena os registos feitos pelo Gestor da UBS para validação do Administrador Municipal
+CREATE TABLE IF NOT EXISTS intercorrencias (
+    id SERIAL PRIMARY KEY,
+    ubs_nome VARCHAR(255) NOT NULL,
+    tipo VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    impacto VARCHAR(50) NOT NULL,
+    data_ocorrido DATE NOT NULL,
+    status VARCHAR(50) DEFAULT 'Aguardando Validação',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
