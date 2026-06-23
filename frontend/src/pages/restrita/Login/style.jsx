@@ -47,7 +47,19 @@ export const styles = {
   subtituloLogin: {
     color: '#64748b',
     fontSize: '1rem',
-    marginBottom: '40px'
+    marginBottom: '30px'
+  },
+  // 👇 Estilo adicionado para mensagens de erro do backend
+  caixaErro: {
+    backgroundColor: '#fee2e2',
+    color: '#b91c1c',
+    padding: '12px',
+    borderRadius: '8px',
+    border: '1px solid #fca5a5',
+    fontSize: '0.95rem',
+    textAlign: 'center',
+    marginBottom: '25px',
+    fontWeight: '500'
   },
   formGroup: {
     display: 'flex',

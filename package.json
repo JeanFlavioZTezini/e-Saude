@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "lucide-react": "^1.16.0",
     "pg": "^8.22.0",
     "react-router-dom": "^7.15.1"

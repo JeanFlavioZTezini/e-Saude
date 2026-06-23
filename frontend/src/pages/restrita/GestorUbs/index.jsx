@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   AlertCircle, CheckCircle, Clock, 
@@ -6,48 +6,95 @@ import {
 } from 'lucide-react';
 import { styles } from './style';
 
+const formatarData = (dataIso) => {
+  if (!dataIso) return '';
+  const partes = dataIso.split('T')[0].split('-');
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+};
+
 export default function GestorUbs() {
   const navigate = useNavigate();
 
-  const dadosUnidade = {
-    nome: "UBS Tiradentes",
-    totalRegistros: 24,
-    pendentes: 2,
-    aguardandoCorrecao: 1
-  };
+  const dadosUnidade = { nome: "UBS Tiradentes" };
 
-  const [minhasIntercorrencias, setMinhasIntercorrencias] = useState([
-    { id: 101, tipo: 'Falta de Insumo (Vacina contra Gripe)', data: '18/06/2026', impacto: 'Alto', status: 'Aguardando Validação' },
-    { id: 98, tipo: 'Queda de Internet', data: '15/06/2026', impacto: 'Médio', status: 'Validada' },
-    { id: 90, tipo: 'Ar condicionado quebrado (Sala de Vacina)', data: '10/06/2026', impacto: 'Alto', status: 'Aguardando Correção' },
-  ]);
+  const [minhasIntercorrencias, setMinhasIntercorrencias] = useState([]);
+  const [carregandoDados, setCarregandoDados] = useState(true);
 
-  // --- ESTADOS DO MODAL E DO FORMULÁRIO ---
   const [modalAberto, setModalAberto] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [idEdicao, setIdEdicao] = useState(null); // <-- NOVO: Controla se estamos editando
+  
   const [form, setForm] = useState({
-    tipo: '',
-    descricao: '',
-    impacto: 'Baixo',
-    data_ocorrido: ''
+    tipo: '', descricao: '', impacto: 'Baixo', data_ocorrido: ''
   });
 
-  const handleSair = () => navigate('/');
-  const handleEditar = (id) => alert(`Abrindo modo de edição para a intercorrência #${id}...`);
+// BUSCA OS DADOS REAIS DO BACKEND ASSIM QUE A TELA CARREGA
+  useEffect(() => {
+    const buscarDados = async () => {
+      try {
+        const token = localStorage.getItem('token'); // 1. Pega o crachá guardado no login
 
-  const renderTagStatus = (status) => {
-    if (status === 'Validada') return <span style={styles.tagValidada}>{status}</span>;
-    if (status === 'Aguardando Correção') return <span style={styles.tagCorrecao}>{status}</span>;
-    return <span style={styles.tagPendente}>{status}</span>; 
+        const resposta = await fetch(`http://localhost:3000/api/intercorrencias?ubs=${encodeURIComponent(dadosUnidade.nome)}`, {
+          headers: {
+            'Authorization': `Bearer ${token}` // 2. Mostra o crachá para o backend!
+          }
+        });
+        
+        const dados = await resposta.json();
+
+        if (!resposta.ok) throw new Error(dados.erro || 'Falha na requisição');
+
+        setMinhasIntercorrencias(dados);
+      } catch (erro) {
+        console.error("Erro ao buscar dados:", erro);
+        setMinhasIntercorrencias([]); // Evita o crash de tela branca se der erro
+      } finally {
+        setCarregandoDados(false);
+      }
+    };
+    buscarDados();
+  }, []);
+
+  const totalRegistros = minhasIntercorrencias.length;
+  const pendentes = minhasIntercorrencias.filter(i => i.status === 'Aguardando Validação').length;
+  const aguardandoCorrecao = minhasIntercorrencias.filter(i => i.status === 'Aguardando Correção').length;
+
+  const handleSair = () => navigate('/');
+
+  // 👇 NOVA LÓGICA DE ABRuseEffIR O MODAL DE EDIÇÃO 👇
+  const handleEditar = (id) => {
+    const itemParaEditar = minhasIntercorrencias.find(item => item.id === id);
+    if(itemParaEditar) {
+      // Ajusta a data para o formato do input type="date" (YYYY-MM-DD)
+      const dataFormatadaParaInput = itemParaEditar.data_ocorrido.split('T')[0];
+      
+      setForm({
+        tipo: itemParaEditar.tipo,
+        descricao: itemParaEditar.descricao,
+        impacto: itemParaEditar.impacto,
+        data_ocorrido: dataFormatadaParaInput
+      });
+      setIdEdicao(id); // Marca que estamos no modo de edição
+      setModalAberto(true);
+    }
   };
 
-  // --- LÓGICA DE INTEGRAÇÃO COM O BACKEND ---
+  const abrirModalNova = () => {
+    setIdEdicao(null); // Garante que não é edição
+    setForm({ tipo: '', descricao: '', impacto: 'Baixo', data_ocorrido: '' });
+    setModalAberto(true);
+  };
+
+// 👇 LÓGICA DE SALVAR ADAPTADA (CRIAR ou EDITAR) 👇
+// 👇 LÓGICA DE SALVAR ADAPTADA (CRIAR ou EDITAR) 👇
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEnviando(true);
 
     try {
-      // Formata os dados para o envio
+      // 1. Pega o crachá guardado no login
+      const token = localStorage.getItem('token'); 
+
       const payload = {
         ubs_nome: dadosUnidade.nome,
         tipo: form.tipo,
@@ -56,48 +103,54 @@ export default function GestorUbs() {
         data_ocorrido: form.data_ocorrido
       };
 
-      const resposta = await fetch('http://localhost:3000/api/intercorrencias', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const url = idEdicao 
+        ? `http://localhost:3000/api/intercorrencias/${idEdicao}` // Rota de PUT (Editar)
+        : 'http://localhost:3000/api/intercorrencias';           // Rota de POST (Criar)
+      
+      const metodo = idEdicao ? 'PUT' : 'POST';
+
+      // 2. Envia a requisição mostrando o crachá no cabeçalho (headers)
+      const resposta = await fetch(url, {
+        method: metodo,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // <-- MOSTRA O CRACHÁ AQUI!
+        },
         body: JSON.stringify(payload)
       });
 
-      if (!resposta.ok) throw new Error('Falha ao registrar no servidor');
+      if (!resposta.ok) throw new Error('Falha ao comunicar com o servidor');
 
-      const novaIntercorrencia = await resposta.json();
+      const intercorrenciaSalva = await resposta.json();
 
-      // Formata a data recebida do banco (ex: 2026-06-20 -> 20/06/2026)
-      const partesData = novaIntercorrencia.data_ocorrido.split('T')[0].split('-');
-      const dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+      if (idEdicao) {
+        // Atualiza na lista existente se for edição
+        setMinhasIntercorrencias(minhasIntercorrencias.map(item => 
+          item.id === idEdicao ? intercorrenciaSalva : item
+        ));
+      } else {
+        // Adiciona no topo da lista se for nova
+        setMinhasIntercorrencias([intercorrenciaSalva, ...minhasIntercorrencias]);
+      }
 
-      // Adiciona o novo registro no topo da tabela da tela instantaneamente
-      setMinhasIntercorrencias([
-        {
-          id: novaIntercorrencia.id,
-          tipo: novaIntercorrencia.tipo,
-          data: dataFormatada,
-          impacto: novaIntercorrencia.impacto,
-          status: novaIntercorrencia.status
-        },
-        ...minhasIntercorrencias
-      ]);
-
-      // Fecha e limpa o modal
       setModalAberto(false);
-      setForm({ tipo: '', descricao: '', impacto: 'Baixo', data_ocorrido: '' });
 
     } catch (erro) {
       console.error(erro);
-      alert('Erro ao comunicar com o servidor. Verifique se o backend está rodando.');
+      alert('Erro ao salvar os dados.');
     } finally {
       setEnviando(false);
     }
   };
 
+  const renderTagStatus = (status) => {
+    if (status === 'Validada') return <span style={styles.tagValidada}>{status}</span>;
+    if (status === 'Aguardando Correção') return <span style={styles.tagCorrecao}>{status}</span>;
+    return <span style={styles.tagPendente}>{status}</span>; 
+  };
+
   return (
     <div style={styles.dashboardContainer}>
-      
-      {/* ── MENU LATERAL ── */}
       <aside style={styles.sidebar}>
         <div style={styles.logoArea}>🩺 e-Saúde</div>
         <nav style={styles.menuList}>
@@ -112,7 +165,6 @@ export default function GestorUbs() {
         </div>
       </aside>
 
-      {/* ── CONTEÚDO PRINCIPAL ── */}
       <main style={styles.mainContent}>
         <header style={styles.headerPanel}>
           <div>
@@ -136,7 +188,7 @@ export default function GestorUbs() {
               </div>
               <div style={styles.infoCard}>
                 <h3 style={styles.tituloCard}>Aguardando Validação</h3>
-                <p style={styles.valorCard}>{dadosUnidade.pendentes}</p>
+                <p style={styles.valorCard}>{carregandoDados ? '-' : pendentes}</p>
               </div>
             </div>
 
@@ -146,7 +198,7 @@ export default function GestorUbs() {
               </div>
               <div style={styles.infoCard}>
                 <h3 style={styles.tituloCard}>Requer Correção</h3>
-                <p style={styles.valorCard}>{dadosUnidade.aguardandoCorrecao}</p>
+                <p style={styles.valorCard}>{carregandoDados ? '-' : aguardandoCorrecao}</p>
               </div>
             </div>
 
@@ -155,8 +207,8 @@ export default function GestorUbs() {
                 <CheckCircle size={30} />
               </div>
               <div style={styles.infoCard}>
-                <h3 style={styles.tituloCard}>Histórico Total (Mês)</h3>
-                <p style={styles.valorCard}>{dadosUnidade.totalRegistros}</p>
+                <h3 style={styles.tituloCard}>Histórico Total</h3>
+                <p style={styles.valorCard}>{carregandoDados ? '-' : totalRegistros}</p>
               </div>
             </div>
           </div>
@@ -165,8 +217,7 @@ export default function GestorUbs() {
             <div style={styles.headerTabela}>
               <h2 style={styles.tituloSecao}><Activity size={24} color="#1a5f7a" /> Histórico de Registros</h2>
               
-              {/* BOTÃO QUE ABRE O MODAL */}
-              <button style={styles.btnNovaIntercorrencia} onClick={() => setModalAberto(true)}>
+              <button style={styles.btnNovaIntercorrencia} onClick={abrirModalNova}>
                 <PlusCircle size={18} /> Registrar Intercorrência
               </button>
             </div>
@@ -183,34 +234,42 @@ export default function GestorUbs() {
                 </tr>
               </thead>
               <tbody>
-                {minhasIntercorrencias.map((item) => (
-                  <tr key={item.id}>
-                    <td style={{...styles.td, fontWeight: 'bold', color: '#64748b'}}>#{item.id}</td>
-                    <td style={{...styles.td, fontWeight: '600', color: '#0f172a'}}>{item.tipo}</td>
-                    <td style={styles.td}>{item.impacto}</td>
-                    <td style={styles.td}>{item.data}</td>
-                    <td style={styles.td}>{renderTagStatus(item.status)}</td>
-                    <td style={styles.td}>
-                      {(item.status === 'Aguardando Correção' || item.status === 'Aguardando Validação') && (
-                        <button style={styles.btnEditar} onClick={() => handleEditar(item.id)}>
-                          <Edit size={16} /> Editar
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {carregandoDados ? (
+                  <tr><td colSpan="6" style={{...styles.td, textAlign: 'center'}}>Carregando dados do banco...</td></tr>
+                ) : minhasIntercorrencias.length === 0 ? (
+                  <tr><td colSpan="6" style={{...styles.td, textAlign: 'center'}}>Nenhuma intercorrência registrada ainda.</td></tr>
+                ) : (
+                  minhasIntercorrencias.map((item) => (
+                    <tr key={item.id}>
+                      <td style={{...styles.td, fontWeight: 'bold', color: '#64748b'}}>#{item.id}</td>
+                      <td style={{...styles.td, fontWeight: '600', color: '#0f172a'}}>{item.tipo}</td>
+                      <td style={styles.td}>{item.impacto}</td>
+                      <td style={styles.td}>{formatarData(item.data_ocorrido)}</td>
+                      <td style={styles.td}>{renderTagStatus(item.status)}</td>
+                      <td style={styles.td}>
+                        {(item.status === 'Aguardando Correção' || item.status === 'Aguardando Validação') && (
+                          <button style={styles.btnEditar} onClick={() => handleEditar(item.id)}>
+                            <Edit size={16} /> Editar
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </main>
 
-      {/* ── MODAL DE REGISTRO (FORMULÁRIO) ── */}
+      {/* ── MODAL (USADO PARA CRIAR E EDITAR) ── */}
       {modalAberto && (
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
             <div style={styles.modalHeader}>
-              <h2 style={styles.modalTitle}>Nova Intercorrência</h2>
+              <h2 style={styles.modalTitle}>
+                {idEdicao ? `Editando Intercorrência #${idEdicao}` : 'Nova Intercorrência'}
+              </h2>
               <button style={{background: 'none', border: 'none', cursor: 'pointer'}} onClick={() => setModalAberto(false)}>
                 <X size={24} color="#64748b" />
               </button>
@@ -273,14 +332,13 @@ export default function GestorUbs() {
                 </button>
                 <button type="submit" style={styles.btnSalvar} disabled={enviando}>
                   {enviando ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-                  {enviando ? 'Salvando...' : 'Salvar Registro'}
+                  {enviando ? 'Salvando...' : (idEdicao ? 'Salvar Alterações' : 'Salvar Registro')}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
     </div>
   );
 }

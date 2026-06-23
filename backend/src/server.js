@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const intercorrenciaRoutes = require('./routes/intercorrenciaRoutes');
+const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
 const app = express();
 app.use(cors()); 
 app.use(express.json());
+app.use('/api/auth', authRoutes);
 
 // 👇 ESTA É A LINHA QUE FALTAVA PARA CONECTAR O FRONTEND AO BANCO 👇
 app.use('/api/intercorrencias', intercorrenciaRoutes);
